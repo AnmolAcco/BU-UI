@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { FaInfoCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { AppContext } from "../../App";
 const SidebarContainer = styled.div`
   flex: 2;
   background-color: #fafafa;
@@ -47,24 +48,43 @@ const SidebarListItem = styled.li`
   `};
 `;
 function Sidebar() {
+  const { headerName, activeDate, setActiveDate } = useContext(AppContext);
+  const dates = [
+    { date: "7/11/22", id: 1 },
+    { date: "6/1/22", id: 2 },
+    { date: "1/13/22", id: 3 },
+    { date: "4/1/22", id: 4 },
+    { date: "4/19/22", id: 5 },
+    { date: "11/3/21", id: 6 },
+    { date: "3/18/21", id: 7 },
+  ];
+  useEffect(() => {
+    setActiveDate(dates[0]);
+  }, []);
+
   return (
     <SidebarContainer>
       <SidebarWrapper>
         <SidebarMenu>
-          <SidebarTitle>Budgets</SidebarTitle>
+          <SidebarTitle>{headerName}</SidebarTitle>
           <Info>
             <FaInfoCircle style={{ color: "#047BD5" }} /> Recent 7 days content
             budget.
           </Info>
           <SidebarList>
-            <SidebarListItem active={true}> <DateText>7/11/22</DateText> <Status>Active</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>6/1/22</DateText>  <Status>Past</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>1/13/22</DateText> <Status>Past</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>4/1/22</DateText>  <Status>Past</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>4/19/22</DateText> <Status>Past</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>11/3/21</DateText> <Status>Past</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>3/18/21</DateText> <Status>Past</Status> </SidebarListItem>
-            <SidebarListItem> <DateText>1/13/21</DateText> <Status>Past</Status> </SidebarListItem>
+            {dates.map((e) => ( 
+              <>
+                <SidebarListItem
+                  active={activeDate?.id === e?.id}
+                  onClick={(event) => setActiveDate(e)}
+                > 
+                  <DateText>{e.date}</DateText>
+                  <Status>
+                    {activeDate?.id === e?.id ? "Active" : "Past"}
+                  </Status>
+                </SidebarListItem>
+              </>
+            ))}
           </SidebarList>
         </SidebarMenu>
       </SidebarWrapper>

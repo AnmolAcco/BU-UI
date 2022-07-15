@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { MdReplay } from "react-icons/md";
+import { AppContext } from "../../App";
 const RightPanel = styled.div`
   flex: 8;
 `;
@@ -45,45 +46,45 @@ const Slider = styled.div`
   ${({ direction }) => `
      @-webkit-keyframes slidein {  
     from {
-      margin-left: ${(direction && (direction === "right") ? `0%` : `100%`)};
+      margin-left: ${direction && direction === "right" ? `0%` : `100%`};
       width: 300%;
     }
 
     to {
-      margin-left: ${(direction && (direction === "right") ? `100%` : `0%`)};
+      margin-left: ${direction && direction === "right" ? `100%` : `0%`};
       width: 100%;
     }
   }
   @-moz-keyframes slidein {
     from {
-      margin-left:${(direction && (direction === "right") ? `0%` : `100%`)};
+      margin-left:${direction && direction === "right" ? `0%` : `100%`};
       width: 300%;
     }
 
     to {
-      margin-left: ${(direction && (direction === "right") ? `100%` : `0%`)};
+      margin-left: ${direction && direction === "right" ? `100%` : `0%`};
       width: 100%;
     }
   }
   @-o-keyframes slidein {
     from {
-      margin-left: ${(direction && (direction === "right") ? `0%` : `100%`)};
+      margin-left: ${direction && direction === "right" ? `0%` : `100%`};
       width: 300%;
     }
 
     to {
-      margin-left: ${(direction && (direction === "right") ? `100%` : `0%`)};
+      margin-left: ${direction && direction === "right" ? `100%` : `0%`};
       width: 100%;
     }
   }
   @keyframes slidein {
     from {
-      margin-left: ${(direction && (direction === "right") ? `0%` : `100%`)};
+      margin-left: ${direction && direction === "right" ? `0%` : `100%`};
       width: 300%;
     }
 
     to {
-      margin-left: ${(direction && (direction === "right") ? `100%` : `0%`)};
+      margin-left: ${direction && direction === "right" ? `100%` : `0%`};
       width: 100%;
     }
   }
@@ -213,6 +214,7 @@ function Home() {
     Budget: 25,
     CurrentUsage: "0.5k",
   });
+  const { headerName, setHeaderName, activeDate, setBackgroundColor } = useContext(AppContext);
   const [sliderDirection, setSliderDirection] = useState(null);
   const [totalBudget, setTotalBudget] = useState({
     percent: null,
@@ -239,20 +241,21 @@ function Home() {
   return (
     <RightPanel>
       <RightPanelWrapper>
-        <Heading>Budgets</Heading>
-        <Subheading>Content budgets for 7/11/22</Subheading>
+        <Heading>{headerName}</Heading>
+        <Subheading>{`Content budgets for `+ activeDate?.date} </Subheading>
         <Subheading>Total available budget is Rs. 5,00,000.</Subheading>
         <Button onClick={(e) => setSliderDirection("left")}>Edit Budget</Button>
         {sliderDirection && (
           <SliderWrapper>
             <Slider direction={sliderDirection}>
               <SliderContent>
-                <Heading> Edit Budgets</Heading>
+                <Heading>{`Edit ${headerName}`}</Heading>
                 <Subheading>Total available budget is Rs. 5,00,000.</Subheading>
                 <Border>
                   <HeaderTable>
                     <HeaderText>BU</HeaderText>
                     <HeaderText>Budget (%)</HeaderText>
+
                     <HeaderText>Budget</HeaderText>
                     <HeaderText>Current Usage</HeaderText>
                   </HeaderTable>
@@ -263,22 +266,22 @@ function Home() {
                       name="BudgetPercent"
                       value={fields && fields.BudgetPercent}
                       onChange={(e) => handleChange(e)}
-                    ></Input>
+                    />
                     <Input
                       name="Budget"
                       defaultValue={fields.Budget}
                       onChange={(e) => handleChange(e)}
-                    ></Input>
-                    <Input readOnly value={fields.CurrentUsage}></Input>
+                    />
+                    <Input readOnly value={fields.CurrentUsage}/>
                     <ReloadIcon onClick={(e) => resetField(e)}>
                       <MdReplay />
-                    </ReloadIcon>
-                  </Inputholder>
-                  <LineBreaker />
-                  <Divider />
-                  <LineBreaker />
-                  <Divider />
-                  <Inputholder>
+                    </ReloadIcon> 
+                  </Inputholder> 
+                  <LineBreaker />  
+                  <Divider />  
+                  <LineBreaker />  
+                  <Divider />  
+                  <Inputholder>  
                     <Input readOnly value={"Total Budget"}></Input>
                     <Input readOnly value={totalBudget.percent}></Input>
                     <Input readOnly value={totalBudget.amount}></Input>
@@ -287,13 +290,19 @@ function Home() {
                   <ButtonHolder>
                     <Button
                       style={{ marginRight: "20px" }}
-                      onClick={(e) => {setSliderDirection("right");setSliderDirection(null)}}
+                      onClick={(e) => {
+                        setSliderDirection("right");
+                        setSliderDirection(null);
+                      }}
                     >
                       Submit
                     </Button>
                     <Button
                       cancel={true}
-                      onClick={(e) => {setSliderDirection("right");setSliderDirection(null)}}
+                      onClick={(e) => {
+                        setSliderDirection("right");
+                        setSliderDirection(null);
+                      }}
                     >
                       Cancel
                     </Button>
@@ -303,6 +312,9 @@ function Home() {
             </Slider>
           </SliderWrapper>
         )}
+        <Button onClick={(e) => setHeaderName("Teams")}>
+          Show Teams Panel
+        </Button>
       </RightPanelWrapper>
     </RightPanel>
   );
