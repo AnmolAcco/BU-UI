@@ -43,7 +43,7 @@ const Slider = styled.div`
   animation-duration: 1s;
   animation-name: slidein;
   ${({ direction }) => `
-     @-webkit-keyframes slidein {
+     @-webkit-keyframes slidein {  
     from {
       margin-left: ${(direction && (direction === "right") ? `0%` : `100%`)};
       width: 300%;
